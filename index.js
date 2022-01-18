@@ -1,11 +1,12 @@
 'use strict';
 
-const { start, app } = require('./lib/server.js');
-const { db } = require('./lib/models');
+const { start } = require('./lib/server.js');
+const sequelize = require('./lib/models');
 const PORT = process.env.PORT || 3000;
 
-// must import, initialize db to perform operations against it
-
-db.sync()
+// make sure our tables are created, start up the HTTP server.
+sequelize.sync()
   .then(() => start(PORT))
-  .catch(err => console.log(err));
+  .catch(e => {
+    console.error('Could not start server', e.message);
+  });
